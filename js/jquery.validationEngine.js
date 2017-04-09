@@ -27,24 +27,8 @@
 				// bind all formError elements to close on click
 				$(document).on("click", ".formError", function() {
 					$(this).fadeOut(150, function() {
-						// get field element if needed
-						var prompt = $(this);
-						if ( options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
-						{
-							var form = $(this.closest ( 'form, .validationEngineContainer'));
-							form.find ( '['+options.validateAttribute+'*=validate]').not ( ':disabled').each ( function ()
-							{
-								var field = $(this);
-								if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addSuccessCssClassToField != '')
-								{
-									field.removeClass ( options.addSuccessCssClassToField);
-								}
-								if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addFailureCssClassToField != '')
-								{
-									field.removeClass ( options.addFailureCssClassToField);
-								}
-							});
-						}
+						if(options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
+							$(this).data('cssClassField').removeClass ( options.addSuccessCssClassToField).removeClass ( options.addFailureCssClassToField);
 						// remove prompt once invisible
 						prompt.closest('.formError').remove();
 					});
@@ -236,22 +220,8 @@
 				 closingtag = methods._getClassName($(form).attr("id")) +"formError";
 			 }
 			 $('.'+closingtag).fadeTo(fadeDuration, 0, function() {
-				var prompt = $(this);
-				if ( options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
-				{
-					form.find ( '['+options.validateAttribute+'*=validate]').not ( ':disabled').each ( function ()
-					{
-						var field = $(this);
-						if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addSuccessCssClassToField != '')
-						{
-							field.removeClass ( options.addSuccessCssClassToField);
-						}
-						if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addFailureCssClassToField != '')
-						{
-							field.removeClass ( options.addFailureCssClassToField);
-						}
-					});
-				}
+				if(options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
+					$(this).data('cssClassField').removeClass ( options.addSuccessCssClassToField).removeClass ( options.addFailureCssClassToField);
 				prompt.closest('.formError').remove();
 			 });
 			 return this;
@@ -264,22 +234,8 @@
 			 var options = form.data('jqv');
 			 var duration = options ? options.fadeDuration:300;
 			 $('.formError').fadeTo(duration, 0, function() {
-				var prompt = $(this);
-				if ( options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
-				{
-					form.find ( '['+options.validateAttribute+'*=validate]').not ( ':disabled').each ( function ()
-					{
-						var field = $(this);
-						if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addSuccessCssClassToField != '')
-						{
-							field.removeClass ( options.addSuccessCssClassToField);
-						}
-						if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addFailureCssClassToField != '')
-						{
-							field.removeClass ( options.addFailureCssClassToField);
-						}
-					});
-				}
+				if(options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
+					$(this).data('cssClassField').removeClass ( options.addSuccessCssClassToField).removeClass ( options.addFailureCssClassToField);
 				prompt.closest('.formError').remove();
 			 });
 			 return this;
@@ -868,19 +824,24 @@
 		* @private
 		*/
 		_handleStatusCssClasses: function(field, options) {
+			var prompt = methods._getPrompt(field);
 			/* remove all classes */
 			if(options.addSuccessCssClassToField)
 				field.removeClass(options.addSuccessCssClassToField);
 
 			if(options.addFailureCssClassToField)
+				$(prompt).data('cssClassField', field);
 				field.removeClass(options.addFailureCssClassToField);
 
 			/* Add classes */
-			if (options.addSuccessCssClassToField && !options.isError)
+			if (options.addSuccessCssClassToField && !options.isError) {
+				$(prompt).data('cssClassField', field);
 				field.addClass(options.addSuccessCssClassToField);
+			}
 
-			if (options.addFailureCssClassToField && options.isError)
+			if (options.addFailureCssClassToField && options.isError) {
 				field.addClass(options.addFailureCssClassToField);
+			}
 		},
 
 		 /********************
@@ -1773,22 +1734,8 @@
 					prompt.animate({
 						"opacity": 0
 					},function(){
-						if ( options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
-						{
-							var form = $(this).closest ( 'form, .validationEngineContainer');
-							form.find ( '['+options.validateAttribute+'*=validate]').not ( ':disabled').each ( function ()
-							{
-								var field = $(this);
-								if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addSuccessCssClassToField != '')
-								{
-									field.removeClass ( options.addSuccessCssClassToField);
-								}
-								if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addFailureCssClassToField != '')
-								{
-									field.removeClass ( options.addFailureCssClassToField);
-								}
-							});
-						}
+						if(options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
+							$(this).data('cssClassField').removeClass ( options.addSuccessCssClassToField).removeClass ( options.addFailureCssClassToField);
 						prompt.closest('.formError').remove();
 					});
 				}, options.autoHideDelay);
@@ -1863,24 +1810,9 @@
 			 var prompt = methods._getPrompt(field);
 			 if (prompt)
 				 prompt.fadeTo("fast", 0, function() {
-					var form = $(this).closest('form, .validationEngineContainer');
 					var options = form.data('jqv');
-					if ( options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
-					{
-						var form = $(this).closest ( 'form, .validationEngineContainer');
-						form.find ( '['+options.validateAttribute+'*=validate]').not ( ':disabled').each ( function ()
-						{
-							var field = $(this);
-							if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addSuccessCssClassToField != '')
-							{
-								field.removeClass ( options.addSuccessCssClassToField);
-							}
-							if ( prompt.hasClass ( field.attr ( 'id') + 'formError') && options.addFailureCssClassToField != '')
-							{
-								field.removeClass ( options.addFailureCssClassToField);
-							}
-						});
-					}
+					if(options.addSuccessCssClassToField != '' || options.addFailureCssClassToField != '')
+						$(this).data('cssClassField').removeClass ( options.addSuccessCssClassToField).removeClass ( options.addFailureCssClassToField);
 					prompt.closest('.formError').remove();
 				 });
 		 },
