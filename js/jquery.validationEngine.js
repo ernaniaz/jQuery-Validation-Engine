@@ -1692,7 +1692,11 @@
 					field.after(prompt);
 				}
 			} else {
-				field.before(prompt);
+				if(options.positionAt === 'after') {
+					field.after(prompt);
+				} else {
+					field.before(prompt);
+				}
 			}
 
 			var pos = methods._calculatePosition(field, prompt, options);
@@ -2090,6 +2094,9 @@
 		// inline gets inserted after the validated field or into an element specified in data-prompt-target
 		promptPosition: "topRight",
 		bindMethod:"bind",
+		// Prompt position relative to data field
+		// Could be added before (default) or after.
+		positionAt: "before",
 		// internal, automatically set to true when it parse a _ajax rule
 		inlineAjax: false,
 		// if set to true, the form data is sent asynchronously via ajax to the form.action url (get)
