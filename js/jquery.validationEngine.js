@@ -1692,7 +1692,7 @@
 					field.after(prompt);
 				}
 			} else {
-				if(positionAt === 'after') {
+				if(options.positionAt === 'after') {
 					field.after(prompt);
 				} else {
 					field.before(prompt);
